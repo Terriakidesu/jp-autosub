@@ -1,0 +1,15 @@
+[project]
+name = "jp-autosub"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "whisper-timestamped>=1.15.0",
+    "python-dotenv>=1.2.2",
+    "yt-dlp-ejs>=0.8.0",
+    "librosa>=0.11.0",
+    "pysrt>=1.1.2",
+    "deepl>=1.30.0",
+    "rich>=15.0.0",
+]
