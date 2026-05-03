@@ -4,21 +4,30 @@ This notebook configures the `jp-autosub` environment on Google Colab to enable 
 
 ## 1. Setup Environment
 ```python
+from google.colab import userdata
+import os
+
+# Set these in the "Secrets" tab (key icon) in Colab
+GIT_TOKEN = userdata.get('GIT_TOKEN')
+DEEPL_API_KEY = userdata.get('DEEPL_API_KEY')
+
+REPO_URL = f"https://{GIT_TOKEN}@github.com/your-username/jp-autosub.git"
+os.environ['REPO_URL'] = REPO_URL
+
 !apt-get update && apt-get install -y ffmpeg
-!git clone https://github.com/your-username/jp-autosub.git
+!git clone $REPO_URL
 %cd jp-autosub
 !pip install uv
 !uv sync
-!uv pip install torchaudio onnxruntime
+# Install CUDA-enabled torch/torchaudio for T4 GPU
+!pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+!uv pip install onnxruntime-gpu
 ```
 
 ## 2. Configuration
-Create a `.env` file for your DeepL API key.
 ```python
-from google.colab import userdata
-deepl_key = userdata.get('DEEPL_API_KEY')
 with open(".env", "w") as f:
-    f.write(f"DEEPL_API_KEY={deepl_key}")
+    f.write(f"DEEPL_API_KEY={DEEPL_API_KEY}")
 ```
 
 ## 3. Run Transcription

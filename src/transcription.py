@@ -16,7 +16,13 @@ def transcribe_japanese(
         return
 
     print(f"▶ Transcribing Japanese audio with timestamp alignment (model: {model_size})...")
-    model = whisper_timestamped.load_model(model_size, device="cpu")
+    
+    # Use GPU if available
+    import torch
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    print(f"✓ Using device: {device}")
+    
+    model = whisper_timestamped.load_model(model_size, device=device)
 
     # Load audio (already WAV 16kHz mono)
     import soundfile as sf
