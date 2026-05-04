@@ -39,6 +39,12 @@ def transcribe_japanese(
     )
 
     # Convert result to aggregated segments
+    class Segment:
+        def __init__(self, start, end, text):
+            self.start = start
+            self.end = end
+            self.text = text
+
     segments = []
     current_seg = None
 
@@ -59,7 +65,7 @@ def transcribe_japanese(
             else:
                 if current_seg:
                     segments.append(current_seg)
-                current_seg = Word(word["start"], word["end"], text)
+                current_seg = Segment(word["start"], word["end"], text)
 
     print("\n") # New line after transcription
     if current_seg:

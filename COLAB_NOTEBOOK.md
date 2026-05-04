@@ -18,11 +18,12 @@ os.environ['REPO_URL'] = REPO_URL
 !git clone $REPO_URL
 %cd jp-autosub
 !pip install uv
+# Sync project dependencies
 !uv sync
-# Install CUDA-enabled torch/torchaudio for T4 GPU
-!pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
-!uv pip install onnxruntime-gpu
+# Ensure dependencies are installed in the uv environment
+!uv pip install torch torchaudio onnxruntime
 ```
+
 
 ## 2. Configuration
 ```python

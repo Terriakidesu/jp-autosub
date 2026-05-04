@@ -11,7 +11,7 @@ def fmt_time(seconds: float) -> str:
     millis = int((seconds % 1) * 1000)
     return f"{hours:02d}:{mins:02d}:{secs:02d},{millis:03d}"
 
-def merge_segments(segments, min_gap=0.5, max_chars=30, max_duration=5.0):
+def merge_segments(segments, min_gap=0.5, max_chars=30, max_duration=5.0, max_words=None):
     """Merges short segments and splits long ones, optimized for Japanese."""
     merged = []
     seg_list = list(segments)
@@ -23,9 +23,13 @@ def merge_segments(segments, min_gap=0.5, max_chars=30, max_duration=5.0):
         current_text = getattr(current, 'text', '')
         next_text = getattr(next_seg, 'text', '')
         
+        # Convert SubRipTime to seconds for arithmetic
+        curr_end_sec = current.end.ordinal / 1000.0 if hasattr(current.end, 'ordinal') else current.end
+        next_start_sec = next_seg.start.ordinal / 1000.0 if hasattr(next_seg.start, 'ordinal') else next_seg.start
+        
         # Merge if short and close
-        # Use character count instead of word count for Japanese
-        if (next_seg.start - current.end < min_gap) and (len(current_text) + len(next_text) < max_chars):
+        # Use character count as primary constraint
+        if (next_start_sec - curr_end_sec < min_gap) and (len(current_text) + len(next_text) < max_chars):
             current.end = next_seg.end
             current.text = (current_text + next_text).strip()
         else:
