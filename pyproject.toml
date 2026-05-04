@@ -13,3 +13,11 @@ dependencies = [
     "deepl>=1.30.0",
     "rich>=15.0.0",
 ]
+
+[project.optional-dependencies]
+gpu = [
+    "torch",
+    "torchaudio",
+    "onnxruntime-gpu",
+    "silero-vad",
+]
